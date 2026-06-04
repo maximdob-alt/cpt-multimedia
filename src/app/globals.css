@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+:root {
+  --background: #121212;
+  --foreground: #F5F5F7;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --color-obsidian: #121212;
+  --color-smoke-gray: #1C1C1E;
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass-bg: rgba(28, 28, 30, 0.7);
+}
+
+/* Base custom styles */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+}
+
+/* Custom Webkit scrollbar for a premium dark editorial feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Glassmorphism panel styling */
+.glass-panel {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 8px;
+}
+
+/* Advanced editorial typography utilities */
+.editorial-title {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.body-text {
+  font-family: var(--font-sans);
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+
+.fluid-tracking-wide {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Audio wave pulse animation keyframe */
+@keyframes wavePulse {
+  0%, 100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.wave-bar {
+  transform-origin: bottom;
+  animation: wavePulse 1.2s ease-in-out infinite;
+}
+
+/* Custom cinemagraph scanning noise overlay */
+.cinemagraph-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+}
+
+/* Firefly glow keyframes */
+@keyframes fireflyPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px 4px rgba(255, 179, 0, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 35px 8px rgba(255, 179, 0, 0.9);
+  }
+}
+
+.firefly-glow {
+  animation: fireflyPulse 1.5s ease-in-out infinite;
+}
+
+/* #10 — Animated Film Grain Overlay */
+@keyframes grainShift {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -3%); }
+  20% { transform: translate(3%, 1%); }
+  30% { transform: translate(-1%, 4%); }
+  40% { transform: translate(4%, -2%); }
+  50% { transform: translate(-3%, 2%); }
+  60% { transform: translate(2%, -4%); }
+  70% { transform: translate(-4%, 1%); }
+  80% { transform: translate(1%, 3%); }
+  90% { transform: translate(3%, -1%); }
+}
+
+.film-grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 60;
+  animation: grainShift 0.5s steps(5) infinite;
+}
+
+/* #11 — Cursor Context Changes */
+.cursor-media {
+  cursor: crosshair;
+}
+
+.cursor-reading {
+  cursor: default;
+}
+
+.cursor-interactive {
+  cursor: pointer;
+}
+
+/* #3 — Typewriter Effect */
+@keyframes typewriterBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: rgba(255,255,255,0.6);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: typewriterBlink 0.8s ease-in-out infinite;
+}
+
+/* #6 — Section Progress Bar */
+.section-progress-track {
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.section-progress-fill {
+  height: 100%;
+  background: rgba(255,255,255,0.3);
+  border-radius: 1px;
+  transition: width 0.1s linear;
+}
