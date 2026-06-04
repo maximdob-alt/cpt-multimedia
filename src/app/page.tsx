@@ -11,7 +11,6 @@ import ActNavSidebar from "@/components/ActNavSidebar";
 import TypewriterText from "@/components/TypewriterText";
 import SectionProgress from "@/components/SectionProgress";
 import TextCarousel from "@/components/TextCarousel";
-import FireflyTracker from "@/components/FireflyTracker";
 import ExpandableText from "@/components/ExpandableText";
 
 // Helper component for upscale fade reveal on scroll
@@ -192,8 +191,6 @@ export default function Home() {
         className="fixed top-0 left-0 right-0 h-[3px] bg-white origin-left z-50 shadow-md shadow-white/20" 
         style={{ scaleX }}
       />
-
-      <FireflyTracker />
 
       {/* Film Grain */}
       <div className="film-grain" aria-hidden="true" />
