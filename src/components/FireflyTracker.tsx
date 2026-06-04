@@ -1,127 +1,81 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 export default function FireflyTracker() {
-  const [activeTarget, setActiveTarget] = useState<HTMLElement | null>(null);
-  const [isSpotlighted, setIsSpotlighted] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 20,
+    restDelta: 0.001
+  });
 
-  // Position Motion Values
-  const fireflyX = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : 0);
-  const fireflyY = useMotionValue(typeof window !== "undefined" ? window.innerHeight / 2 : 0);
+  const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
-  // Raw scroll/motion data piped through spring configuration (stiffness: 80, damping: 20, mass: 0.5)
-  const springX = useSpring(fireflyX, { stiffness: 80, damping: 20, mass: 0.5 });
-  const springY = useSpring(fireflyY, { stiffness: 80, damping: 20, mass: 0.5 });
-
-  // 1. Mouse Follower Baseline (when no active waypoint is intersected)
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!activeTarget) {
-        // Use clientX/clientY for viewport positioning (or transform to absolute document Y)
-        fireflyX.set(e.clientX);
-        fireflyY.set(e.clientY);
-      }
-    };
+    if (typeof window === "undefined") return;
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [activeTarget, fireflyX, fireflyY]);
+    const handleScroll = () => {
+      // Find the centermost media asset or audio player
+      const targets = Array.from(document.querySelectorAll('.media-asset, .audio-player'));
+      
+      let closest: Element | null = null;
+      let minDistance = Infinity;
+      const centerY = window.innerHeight / 2;
 
-  // 2. Waypoint Intersection Observer & Spotlighting
-  useEffect(() => {
-    const waypoints = document.querySelectorAll("[data-waypoint]");
-    
-    // Observer targeting the middle third of the viewport
-    const observerOptions = {
-      root: null,
-      rootMargin: "-33% 0px -33% 0px",
-      threshold: 0,
-    };
+      targets.forEach(target => {
+        const rect = target.getBoundingClientRect();
+        const elementCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(centerY - elementCenter);
 
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      // Find the first target that is currently intersecting
-      const intersectingEntry = entries.find((entry) => entry.isIntersecting);
-
-      if (intersectingEntry) {
-        const target = intersectingEntry.target as HTMLElement;
-        setActiveTarget(target);
-        setIsSpotlighted(true);
-      } else {
-        // Check if any waypoint remains in the middle third
-        let foundAny = false;
-        waypoints.forEach((el) => {
-          const rect = el.getBoundingClientRect();
-          const midViewport = window.innerHeight / 2;
-          // Check if element is in the middle third region
-          if (rect.top < midViewport + 100 && rect.bottom > midViewport - 100) {
-            setActiveTarget(el as HTMLElement);
-            setIsSpotlighted(true);
-            foundAny = true;
-          }
-        });
-
-        if (!foundAny) {
-          setActiveTarget(null);
-          setIsSpotlighted(false);
+        // If the element is somewhat in the middle of the screen
+        if (distance < window.innerHeight * 0.35 && distance < minDistance) {
+          minDistance = distance;
+          closest = target;
         }
+      });
+
+      if (closest) {
+        setTargetRect((closest as Element).getBoundingClientRect());
+      } else {
+        setTargetRect(null);
       }
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    waypoints.forEach((el) => observer.observe(el));
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    // Initial check
+    setTimeout(handleScroll, 500);
 
     return () => {
-      waypoints.forEach((el) => observer.unobserve(el));
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
-  // Update target coordinates dynamically on scroll/resize/frame
-  useEffect(() => {
-    let animationFrameId: number;
-
-    const updatePosition = () => {
-      if (activeTarget) {
-        const rect = activeTarget.getBoundingClientRect();
-        // Glide to target element's perimeter center
-        const targetX = rect.left + rect.width / 2;
-        const targetY = rect.top + rect.height / 2;
-
-        fireflyX.set(targetX);
-        fireflyY.set(targetY);
-      }
-      animationFrameId = requestAnimationFrame(updatePosition);
-    };
-
-    if (activeTarget) {
-      updatePosition();
-    }
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [activeTarget, fireflyX, fireflyY]);
+  // When no target, it sits on the right edge showing scroll progress
+  const defaultY = useTransform(smoothProgress, [0, 1], ["24px", "calc(100vh - 24px)"]);
+  const defaultX = "calc(100vw - 24px)";
 
   return (
     <motion.div
-      id="firefly-particle"
-      className="w-2.5 h-2.5 rounded-full bg-[#FFB300] z-50 pointer-events-none transition-all duration-300 firefly-glow"
-      animate={{
-        scale: isSpotlighted ? 1.4 : 1.0,
-      }}
-      // Dynamic inline style mapping to adjust position, inertia, and spotlight glow
+      className="fixed top-0 left-0 rounded-full z-50 pointer-events-none mix-blend-screen"
       style={{
-        top: 0,
-        left: 0,
-        x: springX,
-        y: springY,
-        translateX: "-50%",
-        translateY: "-50%",
-        position: "fixed",
-        boxShadow: isSpotlighted 
-          ? "0 0 35px 12px rgba(255,179,0,0.9)" 
-          : "0 0 20px 4px rgba(255,179,0,0.6)"
+        backgroundColor: "rgba(255,179,0,1)",
+        boxShadow: targetRect ? "0 0 40px 10px rgba(255,179,0,0.4)" : "0 0 20px 4px rgba(255,179,0,0.6)",
+      }}
+      animate={{
+        x: targetRect ? targetRect.left - 20 : defaultX, // Hover to the left side of the asset
+        y: targetRect ? targetRect.top + targetRect.height / 2 : (defaultY as any),
+        width: targetRect ? 35 : 8,
+        height: targetRect ? 35 : 8,
+        opacity: targetRect ? 0.8 : 1,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 80,
+        damping: 20,
       }}
     />
   );
