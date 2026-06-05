@@ -13,6 +13,7 @@ import SectionProgress from "@/components/SectionProgress";
 import TextCarousel from "@/components/TextCarousel";
 import FireflyTracker from "@/components/FireflyTracker";
 import ExpandableText from "@/components/ExpandableText";
+import PhotoCarousel from "@/components/PhotoCarousel";
 
 // Helper component for fade+lift reveal on scroll
 function ViewportReveal({
@@ -555,6 +556,13 @@ export default function Home() {
 
               </div>
             </ViewportReveal>
+          </div>
+        </section>
+
+        {/* ── PHOTO CAROUSEL ── */}
+        <section className="relative w-full py-20 bg-[#121212] flex items-center justify-center">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12">
+            <PhotoCarousel />
           </div>
         </section>
 
