@@ -56,6 +56,14 @@ function InterplayCaption({ text }: { text: string }) {
   );
 }
 
+function ClickPrompt() {
+  return (
+    <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-sans font-bold text-center mt-2">
+      [ Click any asset to reveal its rationale ]
+    </p>
+  );
+}
+
 interface AssetConfig {
   id: string;
   title: string;
@@ -123,7 +131,7 @@ export default function Home() {
       id: "Cinematic_mm_film_style_A_s.mp4",
       title: "The Institutional Facade",
       rationale:
-        "The vintage car moving blindly toward a looming, locked institutional facade in the mist. It represents the quiet, uncritical way we move forward into systems that were built without our input—guided by momentum, not choice.",
+        "I chose this video of a vintage car moving blindly toward a looming, locked institutional building in the mist because it physically represents our early journeys in life. We move down paths made by outside systems before we even understand who we are or where we are going.",
       mediaType: "video",
       mediaSrc: "/videos/Cinematic_mm_film_style_A_s.mp4",
       alt: "Vintage car driving into a locked institutional gate in the mist.",
@@ -150,7 +158,7 @@ export default function Home() {
       id: "High_end_cinematic_macro_cinem.mp4",
       title: "The Fracture",
       rationale:
-        "Macro fracture graphics detailing a sudden break in social awareness. The moment something that looked solid and reliable begins to visibly crack represents the rupture of illusion—the jarring, irreversible moment of seeing through the system.",
+        "I chose this macro cinematic video of a mirror cleanly cracking across a human eye reflection to represent the painful shock of self-awareness. It is the precise moment when the illusions of childhood break, forcing you to look at reality clearly for the first time.",
       mediaType: "video",
       mediaSrc: "/videos/High_end_cinematic_macro_cinem.mp4",
       alt: "Cinematic close-up of fracturing digital textures.",
@@ -338,7 +346,7 @@ export default function Home() {
                   </blockquote>
 
                   <p className="text-base text-zinc-400 font-sans leading-[1.6]">
-                    When we are young, our lives are mostly built around what other people tell us. We listen to small things we overhear, follow rules we don't fully understand, and accept labels from parents or teachers. We are told we are special, but we don't realize that schools and systems often care more about what we can produce or achieve than who we actually are. We push ourselves down paths that make us uncomfortable, taking on hard challenges just to prove something, thinking we are completely in control of our own future. In Grade 9, I picked all the hardest academic courses because that's what I was 'supposed' to do, without ever asking if it was what I actually wanted. Looking back, I see how much of my own life has been spent following templates provided by institutions instead of making my own choices from the day I started.
+                    When I was younger, I didn't really think about where I was going. My life was mostly built around expectations I didn't question. I just followed the rules, listened to what adults told me, and accepted whatever labels were given to me by my school or my parents. We are told we are special, but we don't realize that schools and systems often care more about what we can produce or achieve than who we actually are. In Grade 9, I picked all the hardest academic courses because that's what I was 'supposed' to do, without ever asking if it was what I actually wanted. Looking back, I see how much of my own life has been spent following templates provided by institutions instead of making my own choices from the day I started.
                   </p>
 
                   <ExpandableText content="Act 1 is all about the beginning of life where we are blind to how the world works. In the book Never Let Me Go, the clones at Hailsham think they are living a normal childhood, but they are actually being raised for a dark purpose they have no control over. This section shows how we all start out following a pre-written map made by society before we grow up enough to question it." />
@@ -352,39 +360,37 @@ export default function Home() {
 
             {/* Media Column */}
             <div className="col-span-1 md:col-span-6 flex flex-col gap-6">
-              <div className="h-[500px] rounded-xl overflow-hidden border border-white/10 media-asset">
+              <div className="h-[500px] rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("Cinematic_mm_film_style_A_s.mp4")}>
                 <MediaAsset
                   id="Cinematic_mm_film_style_A_s.mp4"
                   type="video"
                   src="/videos/Cinematic_mm_film_style_A_s.mp4"
                   alt="Institutional Facade Video Loop"
                   title="Act I Video"
-                  onClick={() => openAssetModal("Cinematic_mm_film_style_A_s.mp4")}
                 />
               </div>
-              <div className="h-60 rounded-xl overflow-hidden border border-white/10 media-asset mt-4">
+              <div className="h-60 rounded-xl overflow-hidden border border-white/10 media-asset mt-4 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4006")}>
                 <MediaAsset
                   id="IMG_4006"
                   type="image"
                   src="/images/IMG_4006.jpg"
                   alt="Predetermined Pathway"
                   title="IMG_4006"
-                  onClick={() => openAssetModal("IMG_4006")}
                   aspectRatio="h-full w-full object-cover"
                 />
               </div>
-              <div className="h-60 rounded-xl overflow-hidden border border-white/10 media-asset">
+              <div className="h-60 rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4023")}>
                 <MediaAsset
                   id="IMG_4023"
                   type="image"
                   src="/images/IMG_4023.jpg"
                   alt="Institutional Ledgers"
                   title="IMG_4023"
-                  onClick={() => openAssetModal("IMG_4023")}
                   aspectRatio="h-full w-full object-cover"
                 />
               </div>
-              <InterplayCaption text="The blurred, foggy background in Act I shows the confusion of following a map I didn't draw." />
+              <InterplayCaption text="The blurred, foggy background and path lines in Act I represent that phase of life where I thought I was choosing everything, but I was really just blindly moving along a pre-written map." />
+              <ClickPrompt />
             </div>
 
           </div>
@@ -399,41 +405,39 @@ export default function Home() {
 
             {/* Media Column (left) */}
             <div className="col-span-1 md:col-span-6 flex flex-col gap-6 order-2 md:order-1">
-              <div className="h-64 sm:h-[380px] rounded-xl overflow-hidden border border-white/10 media-asset">
+              <div className="h-64 sm:h-[380px] rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("High_end_cinematic_macro_cinem.mp4")}>
                 <MediaAsset
                   id="High_end_cinematic_macro_cinem.mp4"
                   type="video"
                   src="/videos/High_end_cinematic_macro_cinem.mp4"
                   alt="Fracture Animation"
                   title="Act II Video"
-                  onClick={() => openAssetModal("High_end_cinematic_macro_cinem.mp4")}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="aspect-square rounded-xl overflow-hidden border border-white/10 media-asset">
+                <div className="aspect-square rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4013")}>
                   <MediaAsset
                     id="IMG_4013"
                     type="image"
                     src="/images/IMG_4013.jpg"
                     alt="Shadowed Identity"
                     title="IMG_4013"
-                    onClick={() => openAssetModal("IMG_4013")}
                     aspectRatio="h-full w-full object-cover"
                   />
                 </div>
-                <div className="aspect-square rounded-xl overflow-hidden border border-white/10 media-asset mt-10">
+                <div className="aspect-square rounded-xl overflow-hidden border border-white/10 media-asset mt-10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("image0")}>
                   <MediaAsset
                     id="image0"
                     type="image"
                     src="/images/image0.jpg"
                     alt="Entrapment Portals"
                     title="image0"
-                    onClick={() => openAssetModal("image0")}
                     aspectRatio="h-full w-full object-cover"
                   />
                 </div>
               </div>
-              <InterplayCaption text="The cold, sharp colors in Act II match the moment I see the system's reflection and feel like a tool." />
+              <InterplayCaption text="The sharp, cold visuals and the dark, off-center reflection in this section matter—they represent the exact feeling of looking at your student dashboard or a spreadsheet and feeling like you've been turned into a number." />
+              <ClickPrompt />
             </div>
 
             {/* Text Column (right) */}
@@ -459,7 +463,7 @@ export default function Home() {
                   </h3>
 
                   <p className="text-base text-zinc-400 font-sans leading-[1.6]">
-                    The biggest shift in growing up is always a cold, harsh moment. You realize how society actually looks at you. You see that the world doesn't look at you as a unique person with a bright future—it looks at you like a tool or an asset to be used up. I remember looking at my student dashboard and feeling like I was just a number in a spreadsheet, where the system only cared about my grades, not how I was actually doing. Realizing that your life and choices have been quietly decided by a system you never picked is a really heavy thing to deal with. Sadly, most people only realize how valuable their freedom was after the chance to change their destination has already passed. True growth doesn't start when we are comfortable; it starts when we face the chilling truth of how the world actually runs.
+                    Growing up hits you hard when you finally realize how the outside world actually sees you. It's like looking into a mirror you've used your whole life, but suddenly noticing a completely different, uncomfortable reflection. You realize the world doesn't always see you as an individual with your own goals. Sometimes, it feels like institutions just view you as a resource or a replaceable part of a bigger machine. I remember looking at my student dashboard and feeling like I was just another number in a spreadsheet, where the system only cared about my grades, not how I was actually doing. Realizing that your life and choices have been quietly decided by a system you never picked is a really heavy thing to deal with. Sadly, most people only realize how valuable their freedom was after the chance to change their destination has already passed. Waking up to how things actually work is a frustrating realization, but it is the first real step to figuring out who you are.
                   </p>
 
                   <ExpandableText content="Act 2 focuses on the turning point of the project: the shock of self-awareness. It represents the painful moment when the main characters in the book, and people in the real world, finally see through the illusions they were told as kids. It is about the loss of innocence and the heavy feeling of finding out you are trapped inside a system." />
@@ -486,53 +490,53 @@ export default function Home() {
                 <div className="flex flex-col items-center gap-4 w-full">
                   <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-sans font-bold">Act III</span>
                   <h2 className="editorial-title text-4xl sm:text-6xl text-white font-medium">
-                    Halting the Resistance
+                    Protecting the Mind
                   </h2>
                   <SectionProgress sectionId="act-III-section" />
                   <StageMarker text="Here, the journey moves inward. Even if the system controls my path, it doesn't own my mind." />
                 </div>
 
                 {/* Centerpiece Video */}
-                <div className="w-full h-64 sm:h-[480px] rounded-xl overflow-hidden border border-white/10 relative media-asset">
+                <div className="w-full h-64 sm:h-[480px] rounded-xl overflow-hidden border border-white/10 relative media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_3986.MP4")}>
                   <MediaAsset
                     id="IMG_3986.MP4"
                     type="video"
                     src="/videos/IMG_3986.MP4"
                     alt="Two hands drifting apart"
                     title="Act III Video"
-                    onClick={() => openAssetModal("IMG_3986.MP4")}
                   />
                 </div>
 
                 {/* Two images beneath */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
-                  <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/10 media-asset">
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4012")}>
                     <MediaAsset
                       id="IMG_4012"
                       type="image"
                       src="/images/IMG_4012.jpg"
                       alt="Hand squeezing a key"
                       title="IMG_4012"
-                      onClick={() => openAssetModal("IMG_4012")}
                       aspectRatio="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/10 media-asset">
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4024")}>
                     <MediaAsset
                       id="IMG_4024"
                       type="image"
                       src="/images/IMG_4024.jpg"
                       alt="Person looking through window screen"
                       title="IMG_4024"
-                      onClick={() => openAssetModal("IMG_4024")}
                       aspectRatio="h-full w-full object-cover"
                     />
                   </div>
                 </div>
 
-                <InterplayCaption text="The warm, resolved sound in Act III shows the shift to protecting the sanctuary of my mind." />
+                <div className="w-full flex flex-col items-center">
+                  <InterplayCaption text="The warm, resolved sound in Act III shows the shift to protecting the sanctuary of my mind." />
+                  <ClickPrompt />
+                </div>
 
-                <blockquote className="border-l-2 border-white/20 pl-5 py-1 italic font-serif text-zinc-200 text-xl leading-relaxed text-left max-w-3xl">
+                <blockquote className="border-l-2 border-white/20 pl-5 py-1 italic font-serif text-zinc-200 text-xl leading-relaxed text-left max-w-3xl mt-4">
                   <TypewriterText
                     text="So, how do you keep moving forward when you know you cannot change the final destination?"
                     speed={35}
@@ -540,7 +544,7 @@ export default function Home() {
                 </blockquote>
 
                 <p className="text-lg text-zinc-300 font-sans leading-[1.6] max-w-3xl text-left">
-                  You have to stop fighting the past and stop looking backward with bitterness. We have to accept where we come from, knowing that our background shapes our first steps, but it doesn't have to lock down our minds. When outside forces have total control over our physical lives, our internal thoughts and choices become our only true safe haven. For me, the only thing I can truly control is how I treat my family, my friends, and the athletes I work with, even if the school system controls my schedule and my future. We have to build our own meaning out of love, out of memories, and out of the desperate, beautiful human instinct to hold onto the people we care about and say, 'Never let me go.' If the system gets to dictate where our bodies go, our inner mind is the only place left where we are completely free. By accepting our history but refusing to let it ruin our ability to care for others, we save our humanity.
+                  I’ve learned that there's no point in looking back with bitterness or trying to fight things I can't change. I have to accept where I started. My background sets up my first steps, but it doesn't have to dictate where my thoughts go. When outside forces have total control over our physical lives, our internal thoughts and choices become our only true safe haven. For me, the only thing I can truly control is how I treat my family, my friends, and the athletes I work with, even if the school system controls my schedule and my future. We have to build our own meaning out of our relationships and our memories. Even if outside systems get to dictate my schedule or where I have to be physically, my inner mind is the one space where I am completely free. By accepting our history but refusing to let it ruin our ability to care for others, we save our internal freedom.
                 </p>
 
                 <ExpandableText content="Act 3 is about finding peace and taking back your power from within. Even though the characters in Never Let Me Go don't change their medical fate, they choose to spend their remaining time loving each other and remembering Hailsham. This section shows that when you can't change the system outside, you find freedom by protecting your own heart and your memories." />

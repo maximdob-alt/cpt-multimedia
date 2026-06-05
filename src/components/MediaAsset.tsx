@@ -10,7 +10,7 @@ interface MediaAssetProps {
   src: string;
   alt: string;
   title: string;
-  onClick: () => void;
+  onClick?: () => void;
   aspectRatio?: string;
 }
 
