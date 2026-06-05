@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 
-export default function FireflyTracker() {
+export default function FireflyTracker({ visible }: { visible: boolean }) {
   const { scrollYProgress } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 80,
     damping: 20,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
@@ -17,19 +17,19 @@ export default function FireflyTracker() {
     if (typeof window === "undefined") return;
 
     const handleScroll = () => {
-      // Find the centermost media asset or audio player
-      const targets = Array.from(document.querySelectorAll('.media-asset, .audio-player'));
-      
+      const targets = Array.from(
+        document.querySelectorAll(".media-asset, .audio-player")
+      );
+
       let closest: Element | null = null;
       let minDistance = Infinity;
       const centerY = window.innerHeight / 2;
 
-      targets.forEach(target => {
+      targets.forEach((target) => {
         const rect = target.getBoundingClientRect();
         const elementCenter = rect.top + rect.height / 2;
         const distance = Math.abs(centerY - elementCenter);
 
-        // If the element is somewhat in the middle of the screen
         if (distance < window.innerHeight * 0.35 && distance < minDistance) {
           minDistance = distance;
           closest = target;
@@ -43,40 +43,45 @@ export default function FireflyTracker() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-    // Initial check
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
     setTimeout(handleScroll, 500);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, []);
 
-  // When no target, it sits on the right edge showing scroll progress
-  const defaultY = useTransform(smoothProgress, [0, 1], ["24px", "calc(100vh - 24px)"]);
-  const defaultX = "calc(100vw - 24px)";
+  const scrollFraction = smoothProgress as any;
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 rounded-full z-50 pointer-events-none mix-blend-screen"
-      style={{
-        backgroundColor: "rgba(255,179,0,1)",
-        boxShadow: targetRect ? "0 0 40px 10px rgba(255,179,0,0.4)" : "0 0 20px 4px rgba(255,179,0,0.6)",
-      }}
-      animate={{
-        x: targetRect ? targetRect.left - 20 : defaultX, // Hover to the left side of the asset
-        y: targetRect ? targetRect.top + targetRect.height / 2 : (defaultY as any),
-        width: targetRect ? 35 : 8,
-        height: targetRect ? 35 : 8,
-        opacity: targetRect ? 0.8 : 1,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 80,
-        damping: 20,
-      }}
-    />
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          key="firefly"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            x: targetRect ? targetRect.left - 24 : "calc(100vw - 32px)",
+            y: targetRect
+              ? targetRect.top + targetRect.height / 2
+              : `calc(${scrollFraction} * (100vh - 48px) + 24px)`,
+            width: targetRect ? 35 : 8,
+            height: targetRect ? 35 : 8,
+          }}
+          exit={{ opacity: 0, scale: 0 }}
+          transition={{ type: "spring", stiffness: 80, damping: 20 }}
+          className="fixed top-0 left-0 rounded-full z-50 pointer-events-none mix-blend-screen"
+          style={{
+            backgroundColor: "rgba(255,179,0,1)",
+            boxShadow: targetRect
+              ? "0 0 40px 12px rgba(255,179,0,0.5)"
+              : "0 0 20px 4px rgba(255,179,0,0.6)",
+          }}
+        />
+      )}
+    </AnimatePresence>
   );
 }
