@@ -1,0 +1,202 @@
+/* Custom Styles for Acid Rain App */
+
+/* Base overrides & Font-smoothing */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tab Layout Transition Effect */
+.tab-section {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-section.active-section {
+    display: flex !important;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tab-section.active-grid {
+    display: block !important;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Active Nav Links styling (Tailwind styling added dynamically) */
+.nav-tab.active-tab {
+    background-color: #1e293b;
+    color: #a3e635;
+    border-color: rgba(163, 230, 53, 0.2);
+}
+
+.mobile-tab.active-tab {
+    background-color: rgba(30, 41, 59, 0.8);
+    color: #a3e635;
+    border-left: 4px solid #a3e635;
+}
+
+/* Custom Webkit scrollbar for premium dark mode aesthetics */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 9999px;
+    border: 2px solid #020617;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+/* Range input overrides */
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f8fafc;
+    border: 2px solid #1e293b;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background-color: #a3e635;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f8fafc;
+    border: 2px solid #1e293b;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.15);
+    background-color: #a3e635;
+}
+
+/* Float Animation for Ion particles */
+@keyframes floatUp {
+    0% {
+        transform: translateY(120%) translateX(0) scale(0.8);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-20%) translateX(var(--random-x, 20px)) scale(1.1);
+        opacity: 0;
+    }
+}
+
+.ion-particle {
+    position: absolute;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(244,63,94,0.6) 0%, rgba(244,63,94,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: floatUp 3s infinite linear;
+}
+
+.ion-particle-neutral {
+    background: radial-gradient(circle, rgba(13,148,136,0.5) 0%, rgba(13,148,136,0) 70%);
+}
+
+/* Transboundary Wind simulator anim */
+@keyframes windFlow {
+    0% {
+        transform: translateX(-100%) translateY(var(--random-y, 0px));
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.5;
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateX(600px) translateY(calc(var(--random-y, 0px) + 20px));
+        opacity: 0;
+    }
+}
+
+.wind-streak {
+    position: absolute;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(163, 230, 53, 0.4), transparent);
+    pointer-events: none;
+    animation: windFlow 2.5s infinite linear;
+}
+
+/* Sky pollution smoke animation */
+@keyframes smokeRise {
+    0% {
+        transform: translateY(100px) translateX(0) scale(1);
+        opacity: 0;
+        filter: blur(10px);
+    }
+    20% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-200px) translateX(var(--smoke-x, 50px)) scale(2.5);
+        opacity: 0;
+        filter: blur(30px);
+    }
+}
+
+.smoke-cloud {
+    position: absolute;
+    bottom: -20px;
+    background: rgba(100, 116, 139, 0.15);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: smokeRise 5s infinite ease-out;
+}
+
+/* Clean energy leaf float anim */
+@keyframes leafFloat {
+    0% {
+        transform: translateY(200px) rotate(0deg) translateX(0);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg) translateX(var(--leaf-x, -30px));
+        opacity: 0;
+    }
+}
+
+.leaf-particle {
+    position: absolute;
+    bottom: -20px;
+    color: rgba(52, 211, 153, 0.3);
+    font-size: 14px;
+    pointer-events: none;
+    animation: leafFloat 4s infinite linear;
+}

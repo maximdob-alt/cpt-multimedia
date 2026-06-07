@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Acid Rain Interactive Environmental Education Portal
 
-## Getting Started
+A modern, responsive, and visually immersive single-page web application (SPA) with hash-based routing built using clean, semantic HTML5, custom Tailwind CSS configurations, and vanilla JavaScript. 
 
-First, run the development server:
+The portal presents comprehensive, scientific information regarding the atmospheric chemistry, ecological devastation, regional and global reach, and modern solutions to acid rain.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 📁 Directory Structure
+
+```text
+.antigravity/
+├── index.html        # Main HTML skeleton containing structural page layout, sections & routing
+├── app.js            # Core JavaScript file (router, pH slider, wind simulator, energy switcher)
+├── styles.css        # Custom CSS for custom scrollbars, range inputs, particle float, and fade effects
+├── verify-tabs.js    # Integrity & verification script validating routing, DOM tags, & event handlers
+└── README.md         # This documentation file
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧪 Interactive Laboratory Elements
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. pH Scale Simulator (Home & Overview)
+- Adjust a slider from pH 1.0 to 14.0 to inspect rain acidity.
+- Demonstrates logarithmic scale difference (e.g., pH 4.0 is 10 times more acidic than pH 5.0, and 100 times more acidic than pure water).
+- Spawns dynamic particle chambers matching the acid level:
+  - High acidity drops spawn dense clouds of red hydronium ($H^+$) ions.
+  - Neutral levels spawn calm, scattered teal water particles.
+  - Alkaline levels spawn blue hydroxide ($OH^-$) ions.
 
-## Learn More
+### 2. Ecosystem Decay Visualizer (Environmental Impact)
+- Drag a dual-state slider to compare a healthy, lush ecosystem (pH 6.5) directly with a severely acidified forest and lake bed (pH 3.5).
+- Displays the immediate impact on biodiversity, tree decay, and soil erosion.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Transboundary Wind & Boundary Simulator (Global Reach)
+- Toggle wind speeds (Calm, Moderate, Gale) to see how industrial sulfur dioxide ($SO_2$) and nitrogen oxides ($NO_x$) travel from major industrial hubs across national boundaries directly into Canadian forests (Ontario, Quebec, Atlantic Canada).
+- Displays animated wind streaks whose velocity matches the chosen weather pattern.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Renewable Energy Toggler (Health & Solutions)
+- Toggle the region's energy generation between Fossil Fuels and Clean Energy.
+- Pushing for renewables clears the atmosphere, swaps smoke particles for floating green leaves, restores solar radiation (Sun & kites), and raises precipitation pH back to normal (pH 5.6).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Verification & Testing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+A verification script (`verify-tabs.js`) is included to programmatically check file structures, HTML elements, and JavaScript bindings:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+node verify-tabs.js
+```
+
+### Verified Checks:
+1. File existence (`index.html`, `app.js`, `styles.css`).
+2. Syntactical correctness of JavaScript execution.
+3. Matching HTML navigation targets and section containers for all tabs.
+4. Inline event bindings (`setPH`, `triggerWind`, `setEnergySource`) map to valid JavaScript functions.
+5. Vital DOM ids match between CSS selectors, JavaScript query selectors, and HTML nodes.

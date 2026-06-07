@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { PlayCircle, ArrowDown } from "lucide-react";
+import { PlayCircle, ArrowDown, PauseCircle, RotateCcw } from "lucide-react";
 import AudioOrchestrator from "@/components/AudioOrchestrator";
 import MediaAsset from "@/components/MediaAsset";
 import ContextModal from "@/components/ContextModal";
@@ -14,6 +14,7 @@ import TextCarousel from "@/components/TextCarousel";
 import FireflyTracker from "@/components/FireflyTracker";
 import ExpandableText from "@/components/ExpandableText";
 import PhotoCarousel from "@/components/PhotoCarousel";
+import SplitPathSlider from "@/components/SplitPathSlider";
 
 // Helper component for fade+lift reveal on scroll
 function ViewportReveal({
@@ -86,6 +87,28 @@ export default function Home() {
 
   // Firefly toggle state
   const [fireflyOn, setFireflyOn] = useState(true);
+  
+  // Master Audio state
+  const masterAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [isMasterAudioPlaying, setIsMasterAudioPlaying] = useState(false);
+
+  const toggleMasterAudio = () => {
+    if (!masterAudioRef.current) return;
+    if (isMasterAudioPlaying) {
+      masterAudioRef.current.pause();
+      setIsMasterAudioPlaying(false);
+    } else {
+      masterAudioRef.current.play();
+      setIsMasterAudioPlaying(true);
+    }
+  };
+
+  const resetMasterAudio = () => {
+    if (!masterAudioRef.current) return;
+    masterAudioRef.current.pause();
+    masterAudioRef.current.currentTime = 0;
+    setIsMasterAudioPlaying(false);
+  };
 
   // Keyboard navigation
   useEffect(() => {
@@ -294,31 +317,67 @@ export default function Home() {
             </ViewportReveal>
 
             <ViewportReveal id="hero-cta" delay={0.2}>
-              <button
-                onClick={() => {
-                  document.getElementById("act-I-section")?.scrollIntoView({ behavior: "smooth" });
-                  setTimeout(() => document.getElementById("play-btn-act-1")?.click(), 800);
-                }}
-                className="mt-12 group flex items-center gap-3 py-4 px-8 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 backdrop-blur-md text-sm text-white uppercase tracking-[0.2em] font-sans font-semibold transition-all duration-300 cursor-pointer"
-              >
-                <PlayCircle className="w-5 h-5 text-zinc-300 group-hover:text-white transition-colors" />
-                Begin the Story
-              </button>
-            </ViewportReveal>
+              {/* Hidden Master Audio Element */}
+              <audio 
+                id="master-audio" 
+                ref={masterAudioRef}
+                src="/audio/cpt_narration_master.mp3" 
+                preload="auto"
+                onEnded={() => setIsMasterAudioPlaying(false)}
+                onPlay={() => setIsMasterAudioPlaying(true)}
+                onPause={() => setIsMasterAudioPlaying(false)}
+              />
 
-            <ViewportReveal id="hero-scroll" delay={0.4}>
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                className="mt-16 text-zinc-600 cursor-pointer flex flex-col items-center gap-2 hover:text-zinc-400 transition-colors"
-                onClick={() => document.getElementById("act-I-section")?.scrollIntoView({ behavior: "smooth" })}
-              >
-                <span className="text-[10px] uppercase tracking-widest font-bold font-sans">Scroll to Begin</span>
-                <ArrowDown size={14} />
-              </motion.div>
+              <div className="mt-12 flex flex-col items-center gap-6">
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => {
+                      if (!isMasterAudioPlaying) {
+                        toggleMasterAudio();
+                      }
+                      document.getElementById("act-I-section")?.scrollIntoView({ behavior: "smooth" });
+                      setTimeout(() => document.getElementById("play-btn-act-1")?.click(), 800);
+                    }}
+                    className="group flex items-center gap-3 py-4 px-8 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 backdrop-blur-md text-sm text-white uppercase tracking-[0.2em] font-sans font-semibold transition-all duration-300 cursor-pointer"
+                  >
+                    <PlayCircle className="w-5 h-5 text-zinc-300 group-hover:text-white transition-colors" />
+                    Begin the Story
+                  </button>
+
+                  <div className="flex items-center gap-2 p-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
+                    <button 
+                      onClick={toggleMasterAudio}
+                      className="p-2 rounded-full hover:bg-white/10 text-zinc-300 hover:text-white transition-colors"
+                      aria-label="Play/Pause Master Narration"
+                    >
+                      {isMasterAudioPlaying ? <PauseCircle className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />}
+                    </button>
+                    <button 
+                      onClick={resetMasterAudio}
+                      className="p-2 rounded-full hover:bg-white/10 text-zinc-300 hover:text-white transition-colors"
+                      aria-label="Reset Master Narration"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <motion.div
+                  animate={{ y: [0, 8, 0] }}
+                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                  className="mt-6 text-zinc-600 cursor-pointer flex flex-col items-center gap-2 hover:text-zinc-400 transition-colors"
+                  onClick={() => document.getElementById("act-I-section")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                  <span className="text-[10px] uppercase tracking-widest font-bold font-sans">Scroll to Begin</span>
+                  <ArrowDown size={14} />
+                </motion.div>
+              </div>
             </ViewportReveal>
           </div>
         </section>
+
+        {/* ── NEW: SPLIT PATH COMPARISON SLIDER ── */}
+        <SplitPathSlider />
 
         {/* ── ACT 1 ── */}
         <section
@@ -361,7 +420,7 @@ export default function Home() {
 
             {/* Media Column */}
             <div className="col-span-1 md:col-span-6 flex flex-col gap-6">
-              <div className="h-[500px] rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("Cinematic_mm_film_style_A_s.mp4")}>
+              <div className="h-[500px] rounded-xl overflow-hidden border border-white/10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("Cinematic_mm_film_style_A_s.mp4")}>
                 <MediaAsset
                   id="Cinematic_mm_film_style_A_s.mp4"
                   type="video"
@@ -370,7 +429,7 @@ export default function Home() {
                   title="Act I Video"
                 />
               </div>
-              <div className="h-60 rounded-xl overflow-hidden border border-white/10 media-asset mt-4 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4006")}>
+              <div className="h-60 rounded-xl overflow-hidden border border-white/10 mt-4 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4006")}>
                 <MediaAsset
                   id="IMG_4006"
                   type="image"
@@ -380,7 +439,7 @@ export default function Home() {
                   aspectRatio="h-full w-full object-cover"
                 />
               </div>
-              <div className="h-60 rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4023")}>
+              <div className="h-60 rounded-xl overflow-hidden border border-white/10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4023")}>
                 <MediaAsset
                   id="IMG_4023"
                   type="image"
@@ -406,7 +465,7 @@ export default function Home() {
 
             {/* Media Column (left) */}
             <div className="col-span-1 md:col-span-6 flex flex-col gap-6 order-2 md:order-1">
-              <div className="h-64 sm:h-[380px] rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("High_end_cinematic_macro_cinem.mp4")}>
+              <div className="h-64 sm:h-[380px] rounded-xl overflow-hidden border border-white/10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("High_end_cinematic_macro_cinem.mp4")}>
                 <MediaAsset
                   id="High_end_cinematic_macro_cinem.mp4"
                   type="video"
@@ -416,7 +475,7 @@ export default function Home() {
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="aspect-square rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4013")}>
+                <div className="aspect-square rounded-xl overflow-hidden border border-white/10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4013")}>
                   <MediaAsset
                     id="IMG_4013"
                     type="image"
@@ -426,7 +485,7 @@ export default function Home() {
                     aspectRatio="h-full w-full object-cover"
                   />
                 </div>
-                <div className="aspect-square rounded-xl overflow-hidden border border-white/10 media-asset mt-10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("image0")}>
+                <div className="aspect-square rounded-xl overflow-hidden border border-white/10 mt-10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("image0")}>
                   <MediaAsset
                     id="image0"
                     type="image"
@@ -498,7 +557,7 @@ export default function Home() {
                 </div>
 
                 {/* Centerpiece Video */}
-                <div className="w-full h-64 sm:h-[480px] rounded-xl overflow-hidden border border-white/10 relative media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_3986.MP4")}>
+                <div className="w-full h-64 sm:h-[480px] rounded-xl overflow-hidden border border-white/10 relative cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_3986.MP4")}>
                   <MediaAsset
                     id="IMG_3986.MP4"
                     type="video"
@@ -510,7 +569,7 @@ export default function Home() {
 
                 {/* Two images beneath */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
-                  <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4012")}>
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4012")}>
                     <MediaAsset
                       id="IMG_4012"
                       type="image"
@@ -520,7 +579,7 @@ export default function Home() {
                       aspectRatio="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/10 media-asset cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4024")}>
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/10 cursor-pointer transition-transform hover:scale-[1.01]" onClick={() => openAssetModal("IMG_4024")}>
                     <MediaAsset
                       id="IMG_4024"
                       type="image"

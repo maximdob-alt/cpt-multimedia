@@ -25,12 +25,15 @@ export default function FireflyTracker({ visible }: { visible: boolean }) {
       let minDistance = Infinity;
       const centerY = window.innerHeight / 2;
 
+      const topThird = window.innerHeight / 3;
+      const bottomThird = window.innerHeight * (2 / 3);
+
       targets.forEach((target) => {
         const rect = target.getBoundingClientRect();
         const elementCenter = rect.top + rect.height / 2;
         const distance = Math.abs(centerY - elementCenter);
 
-        if (distance < window.innerHeight * 0.35 && distance < minDistance) {
+        if (elementCenter > topThird && elementCenter < bottomThird && distance < minDistance) {
           minDistance = distance;
           closest = target;
         }
