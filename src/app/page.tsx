@@ -321,7 +321,7 @@ export default function Home() {
               <audio 
                 id="master-audio" 
                 ref={masterAudioRef}
-                src="/audio/cpt_narration_master.mp3" 
+                src="/audio/cpt_narration_master.m4a" 
                 preload="auto"
                 onEnded={() => setIsMasterAudioPlaying(false)}
                 onPlay={() => setIsMasterAudioPlaying(true)}
